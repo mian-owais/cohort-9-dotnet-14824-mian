@@ -22,11 +22,13 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 
 // Configure EF Core with SQLite for Local Dev
+var dbPath = Path.Combine(builder.Environment.ContentRootPath, "taskmanagement.db");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite($"Data Source={dbPath}"));
 
 // Dependency Injection
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -62,7 +64,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactClient",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:3000") // Common React/Vite ports
+            policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000") // Common React/Vite ports
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });

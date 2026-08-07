@@ -1,0 +1,50 @@
+import api from './api';
+
+export interface TaskDto {
+  id: number;
+  title: string;
+  description: string;
+  status: number; // 0 = Pending, 1 = InProgress, 2 = Completed
+  createdAt: string;
+  dueDate: string | null;
+  userId: number;
+}
+
+export interface CreateTaskDto {
+  title: string;
+  description: string;
+  dueDate: string | null;
+}
+
+export interface UpdateTaskDto {
+  title: string;
+  description: string;
+  status: number;
+  dueDate: string | null;
+}
+
+export const taskService = {
+  getTasks: async (): Promise<TaskDto[]> => {
+    const response = await api.get<TaskDto[]>('/task');
+    return response.data;
+  },
+
+  getTaskById: async (id: number): Promise<TaskDto> => {
+    const response = await api.get<TaskDto>(`/task/${id}`);
+    return response.data;
+  },
+
+  createTask: async (dto: CreateTaskDto): Promise<TaskDto> => {
+    const response = await api.post<TaskDto>('/task', dto);
+    return response.data;
+  },
+
+  updateTask: async (id: number, dto: UpdateTaskDto): Promise<TaskDto> => {
+    const response = await api.put<TaskDto>(`/task/${id}`, dto);
+    return response.data;
+  },
+
+  deleteTask: async (id: number): Promise<void> => {
+    await api.delete(`/task/${id}`);
+  }
+};

@@ -1,7 +1,10 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
+  --text: #4a4a4a;
+  --text-h: #2c2c2c;
+  --bg: #ffffeb;
+  --sage-green: #8A9A5B;
+  --beige: #F5F5DC;
+  --terracotta: #E2725B;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;

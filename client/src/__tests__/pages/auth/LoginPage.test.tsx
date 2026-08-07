@@ -5,12 +5,15 @@ import { authService } from '../../../services/auth.service';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 
-vi.mock('../../../services/auth.service', () => ({
-  authService: {
-    login: vi.fn(),
-  },
-  loginSchema: require('../../../services/auth.service').loginSchema,
-}));
+vi.mock('../../../services/auth.service', async () => {
+  const actual = await vi.importActual('../../../services/auth.service');
+  return {
+    ...actual as any,
+    authService: {
+      login: vi.fn(),
+    },
+  };
+});
 
 describe('LoginPage', () => {
   beforeEach(() => {
