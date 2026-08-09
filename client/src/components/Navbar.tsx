@@ -22,15 +22,15 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
       paddingBottom: '1rem',
       borderBottom: '2px solid var(--sage-green)'
     }}>
-      <div style={{ flex: 1 }}>
-        <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--terracotta)', fontWeight: 700 }}>{title}</h1>
+      <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+        <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--terracotta)', fontWeight: 700, whiteSpace: 'nowrap' }}>{title}</h1>
       </div>
 
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-        <Link to="/dashboard" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Dashboard</Link>
-        <Link to="/tasks" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>My Tasks</Link>
-        <Link to="/about" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>About</Link>
-        <Link to="/contact" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Contact</Link>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+        <Link to="/dashboard" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Dashboard</Link>
+        <Link to="/tasks" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>My Tasks</Link>
+        <Link to="/about" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>About</Link>
+        <Link to="/contact" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Contact</Link>
       </div>
 
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
@@ -41,7 +41,8 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
           padding: '0.5rem 1.5rem',
           borderRadius: '8px',
           fontWeight: 600,
-          cursor: 'pointer'
+          cursor: 'pointer',
+          whiteSpace: 'nowrap'
         }}>Logout</button>
       </div>
     </nav>
