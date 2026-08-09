@@ -37,7 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
         transform: 'translateY(-8px)'
       }}>
         <Link to="/dashboard" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Dashboard</Link>
-        <Link to="/tasks" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>My Tasks</Link>
+        <Link to="/tasks" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Tasks</Link>
         <Link to="/about" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>About</Link>
         <Link to="/contact" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Contact</Link>
       </div>

@@ -44,7 +44,7 @@ const TaskListPage: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <Navbar title="My Tasks" />
+      <Navbar title="Tasks" />
 
       {error && <div className="dashboard-error">{error}</div>}
 
