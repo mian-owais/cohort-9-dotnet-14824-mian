@@ -34,4 +34,12 @@ public class UserController : ControllerBase
 
         return Ok(userDto);
     }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _userService.GetAllUsersAsync();
+        return Ok(users);
+    }
 }

@@ -14,4 +14,8 @@ export const userService = {
     const response = await api.get('/user/me');
     return response.data;
   },
+  getAllUsers: async (): Promise<UserProfile[]> => {
+    const response = await api.get('/user');
+    return response.data;
+  }
 };

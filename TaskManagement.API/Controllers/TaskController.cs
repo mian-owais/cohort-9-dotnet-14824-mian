@@ -51,10 +51,10 @@ public class TaskController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTask(CreateTaskDto dto)
     {
-        var (userId, _) = GetUserInfo();
+        var (userId, role) = GetUserInfo();
         if (userId == 0) return Unauthorized();
 
-        var createdTask = await _taskService.CreateTaskAsync(dto, userId);
+        var createdTask = await _taskService.CreateTaskAsync(dto, userId, role);
         return CreatedAtAction(nameof(GetTask), new { id = createdTask.Id }, createdTask);
     }
 

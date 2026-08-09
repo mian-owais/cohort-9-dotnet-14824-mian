@@ -1,42 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { taskService } from '../../services/task.service';
+import { userService, type UserProfile } from '../../services/user.service';
 import './Tasks.css';
 
 const TaskFormPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const isEditing = Boolean(id);
   const navigate = useNavigate();
-  
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     status: 0,
-    dueDate: ''
+    dueDate: '',
+    assignedToUserId: ''
   });
-  const [loading, setLoading] = useState(isEditing);
+  const [loading, setLoading] = useState(true); // default to true since we fetch user profile
   const [error, setError] = useState('');
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const [users, setUsers] = useState<UserProfile[]>([]);
 
   useEffect(() => {
-    if (isEditing && id) {
-      const fetchTask = async () => {
-        try {
+    const initData = async () => {
+      try {
+        const profile = await userService.getMe();
+        setCurrentUser(profile);
+
+        if (profile.role === 'Admin') {
+          const allUsers = await userService.getAllUsers();
+          setUsers(allUsers);
+        }
+
+        if (isEditing && id) {
           const data = await taskService.getTaskById(Number(id));
           setFormData({
             title: data.title,
             description: data.description,
             status: data.status,
-            dueDate: data.dueDate ? new Date(data.dueDate).toISOString().split('T')[0] : ''
+            dueDate: data.dueDate ? new Date(data.dueDate).toISOString().split('T')[0] : '',
+            assignedToUserId: data.userId ? data.userId.toString() : ''
           });
-        } catch (err: any) {
-          if (err.response?.status === 401) navigate('/login');
-          else setError('Failed to load task details.');
-        } finally {
-          setLoading(false);
         }
-      };
-      fetchTask();
-    }
+      } catch (err: any) {
+        if (err.response?.status === 401) navigate('/login');
+        else setError('Failed to load page data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    initData();
   }, [id, isEditing, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,14 +59,16 @@ const TaskFormPage: React.FC = () => {
           title: formData.title,
           description: formData.description,
           status: Number(formData.status),
-          dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null
+          dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
+          assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined
         });
         navigate(`/tasks/${id}`);
       } else {
         await taskService.createTask({
           title: formData.title,
           description: formData.description,
-          dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null
+          dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
+          assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined
         });
         navigate('/tasks');
       }
@@ -128,6 +142,21 @@ const TaskFormPage: React.FC = () => {
                 onChange={e => setFormData({ ...formData, dueDate: e.target.value })}
               />
             </div>
+
+            {currentUser?.role === 'Admin' && (
+              <div className="form-group">
+                <label>Assign To</label>
+                <select
+                  value={formData.assignedToUserId}
+                  onChange={e => setFormData({ ...formData, assignedToUserId: e.target.value })}
+                >
+                  <option value="">-- Select User --</option>
+                  {users.map(u => (
+                    <option key={u.id} value={u.id}>{u.firstName} {u.lastName} ({u.email})</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>Cancel</button>

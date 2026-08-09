@@ -14,6 +14,7 @@ export interface CreateTaskDto {
   title: string;
   description: string;
   dueDate: string | null;
+  assignedToUserId?: number;
 }
 
 export interface UpdateTaskDto {
@@ -21,6 +22,7 @@ export interface UpdateTaskDto {
   description: string;
   status: number;
   dueDate: string | null;
+  assignedToUserId?: number;
 }
 
 export const taskService = {

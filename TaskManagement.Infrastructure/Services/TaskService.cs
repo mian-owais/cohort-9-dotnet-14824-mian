@@ -77,8 +77,14 @@ public class TaskService : ITaskService
         };
     }
 
-    public async Task<TaskDto> CreateTaskAsync(CreateTaskDto dto, int userId)
+    public async Task<TaskDto> CreateTaskAsync(CreateTaskDto dto, int userId, string role)
     {
+        int assignedUserId = userId;
+        if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && dto.AssignedToUserId.HasValue)
+        {
+            assignedUserId = dto.AssignedToUserId.Value;
+        }
+
         var task = new Core.Entities.TaskItem
         {
             Title = dto.Title,
@@ -86,7 +92,7 @@ public class TaskService : ITaskService
             Status = Core.Enums.TaskStatus.Pending,
             CreatedAt = DateTime.UtcNow,
             DueDate = dto.DueDate,
-            UserId = userId
+            UserId = assignedUserId
         };
 
         _context.TaskItems.Add(task);
@@ -118,6 +124,11 @@ public class TaskService : ITaskService
         task.Description = dto.Description;
         task.Status = dto.Status;
         task.DueDate = dto.DueDate;
+
+        if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && dto.AssignedToUserId.HasValue)
+        {
+            task.UserId = dto.AssignedToUserId.Value;
+        }
 
         await _context.SaveChangesAsync();
 

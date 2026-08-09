@@ -4,6 +4,7 @@ import TaskFormPage from '../../../pages/tasks/TaskFormPage';
 import { taskService } from '../../../services/task.service';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
+import { userService } from '../../../services/user.service';
 
 vi.mock('../../../services/task.service', async () => {
   const actual = await vi.importActual('../../../services/task.service');
@@ -17,6 +18,15 @@ vi.mock('../../../services/task.service', async () => {
   };
 });
 
+vi.mock('../../../services/user.service', () => {
+  return {
+    userService: {
+      getMe: vi.fn(),
+      getAllUsers: vi.fn(),
+    }
+  };
+});
+
 describe('TaskFormPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -27,15 +37,24 @@ describe('TaskFormPage', () => {
   };
 
   it('renders create form correctly', async () => {
+    (userService.getMe as any).mockResolvedValue({ id: 1, role: 'User' });
     renderWithRouter(<TaskFormPage />);
-    expect(screen.getByText('New Task')).toBeInTheDocument();
+    
+    await waitFor(() => {
+      expect(screen.getByText('New Task')).toBeInTheDocument();
+    });
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
   });
 
   it('submits create task form', async () => {
+    (userService.getMe as any).mockResolvedValue({ id: 1, role: 'User' });
     (taskService.createTask as any).mockResolvedValue({ id: 1 });
     renderWithRouter(<TaskFormPage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
+    });
 
     fireEvent.change(screen.getByLabelText(/title/i), { target: { value: 'New Test Task' } });
     fireEvent.change(screen.getByLabelText(/description/i), { target: { value: 'Description' } });
@@ -46,7 +65,8 @@ describe('TaskFormPage', () => {
       expect(taskService.createTask).toHaveBeenCalledWith({
         title: 'New Test Task',
         description: 'Description',
-        dueDate: null
+        dueDate: null,
+        assignedToUserId: undefined
       });
     });
   });

@@ -14,4 +14,6 @@ public class UpdateTaskDto
     public Enums.TaskStatus Status { get; set; }
 
     public DateTime? DueDate { get; set; }
+    
+    public int? AssignedToUserId { get; set; }
 }

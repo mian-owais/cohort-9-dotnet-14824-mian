@@ -29,4 +29,17 @@ public class UserService : IUserService
             CreatedAt = user.CreatedAt
         };
     }
+
+    public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+    {
+        return await _context.Users.Select(user => new UserDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Role = user.Role,
+            CreatedAt = user.CreatedAt
+        }).ToListAsync();
+    }
 }

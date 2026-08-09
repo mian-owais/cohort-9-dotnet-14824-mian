@@ -88,11 +88,24 @@ public class TaskServiceTests
         var service = new TaskService(context);
 
         var dto = new TaskManagement.Core.DTOs.CreateTaskDto { Title = "New Task", Description = "Desc" };
-        var created = await service.CreateTaskAsync(dto, 1);
+        var created = await service.CreateTaskAsync(dto, 1, "User");
 
         Assert.NotEqual(0, created.Id);
         Assert.Equal("New Task", created.Title);
         Assert.Equal(1, context.TaskItems.Count());
+        Assert.Equal(1, created.UserId);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task CreateTaskAsync_AdminRole_CanAssignToOtherUser()
+    {
+        var context = GetDbContext();
+        var service = new TaskService(context);
+
+        var dto = new TaskManagement.Core.DTOs.CreateTaskDto { Title = "Assigned Task", AssignedToUserId = 2 };
+        var created = await service.CreateTaskAsync(dto, 1, "Admin");
+
+        Assert.Equal(2, created.UserId);
     }
 
     [Fact]

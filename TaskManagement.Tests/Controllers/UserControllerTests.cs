@@ -67,4 +67,33 @@ public class UserControllerTests
         // Assert
         Assert.IsType<NotFoundObjectResult>(result);
     }
+
+    [Fact]
+    public async Task GetAllUsers_ShouldReturnOk_WithUsers()
+    {
+        // Arrange
+        var mockService = new Mock<IUserService>();
+        mockService.Setup(s => s.GetAllUsersAsync())
+            .ReturnsAsync(new List<UserDto> { new UserDto { Id = 1 }, new UserDto { Id = 2 } });
+
+        var controller = new UserController(mockService.Object);
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "1"),
+            new Claim(ClaimTypes.Role, "Admin")
+        }, "mock"));
+
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = user }
+        };
+
+        // Act
+        var result = await controller.GetAllUsers();
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var users = Assert.IsAssignableFrom<IEnumerable<UserDto>>(okResult.Value);
+        Assert.Equal(2, users.Count());
+    }
 }
