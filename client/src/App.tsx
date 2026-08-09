@@ -6,6 +6,7 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import TaskListPage from './pages/tasks/TaskListPage';
 import TaskFormPage from './pages/tasks/TaskFormPage';
 import TaskDetailPage from './pages/tasks/TaskDetailPage';
+import ProfilePage from './pages/profile/ProfilePage';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,8 @@ const App: React.FC = () => {
         <Route path="/tasks/new" element={<TaskFormPage />} />
         <Route path="/tasks/:id/edit" element={<TaskFormPage />} />
         <Route path="/tasks/:id" element={<TaskDetailPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
