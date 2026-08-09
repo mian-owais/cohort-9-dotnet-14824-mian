@@ -57,6 +57,8 @@ const DashboardPage: React.FC = () => {
         <h1 className="dashboard-title">Task Dashboard</h1>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <Link to="/tasks" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>My Tasks</Link>
+          <Link to="/about" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>About</Link>
+          <Link to="/contact" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Contact</Link>
           <button onClick={handleLogout} className="logout-btn">Logout</button>
         </div>
       </nav>

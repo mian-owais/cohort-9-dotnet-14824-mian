@@ -39,8 +39,10 @@ const ProfilePage: React.FC = () => {
       <nav className="profile-nav">
         <h1 className="profile-title">User Profile</h1>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Link to="/dashboard" className="nav-link">Dashboard</Link>
-          <Link to="/tasks" className="nav-link">My Tasks</Link>
+          <Link to="/dashboard" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Dashboard</Link>
+          <Link to="/tasks" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>My Tasks</Link>
+          <Link to="/about" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>About</Link>
+          <Link to="/contact" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Contact</Link>
         </div>
       </nav>
 
