@@ -26,7 +26,16 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
         <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--terracotta)', fontWeight: 700, whiteSpace: 'nowrap' }}>{title}</h1>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        gap: '2rem',
+        border: '2px solid var(--sage-green)',
+        padding: '0.5rem 2rem',
+        borderRadius: '30px',
+        backgroundColor: 'var(--beige)',
+        transform: 'translateY(-8px)'
+      }}>
         <Link to="/dashboard" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Dashboard</Link>
         <Link to="/tasks" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>My Tasks</Link>
         <Link to="/about" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>About</Link>
