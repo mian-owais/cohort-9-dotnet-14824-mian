@@ -46,6 +46,11 @@ export const taskService = {
     return response.data;
   },
 
+  askChat: async (taskId: number, message: string): Promise<string> => {
+    const response = await api.post<{ response: string }>('/chat/ask', { taskId, message });
+    return response.data.response;
+  },
+
   deleteTask: async (id: number): Promise<void> => {
     await api.delete(`/task/${id}`);
   }
