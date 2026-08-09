@@ -28,7 +28,8 @@ public class AuthController : ControllerBase
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Email = model.Email
+                Email = model.Email,
+                Role = model.Email.ToLower().Contains("admin") ? "Admin" : "User"
             };
 
             var token = await _authService.RegisterAsync(user, model.Password);

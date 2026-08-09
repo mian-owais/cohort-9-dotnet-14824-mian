@@ -3,24 +3,34 @@ import { useNavigate, Link } from 'react-router-dom';
 import { dashboardService } from '../../services/dashboard.service';
 import type { DashboardMetrics } from '../../services/dashboard.service';
 import { userService, type UserProfile } from '../../services/user.service';
+import { taskService, type TaskDto } from '../../services/task.service';
 import './Dashboard.css';
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [tasks, setTasks] = useState<TaskDto[]>([]);
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [metricData, userData] = await Promise.all([
+        const [metricData, userData, taskData] = await Promise.all([
           dashboardService.getMetrics(),
-          userService.getMe()
+          userService.getMe(),
+          taskService.getTasks()
         ]);
         setMetrics(metricData);
         setProfile(userData);
+        setTasks(taskData);
+
+        if (userData.role === 'Admin') {
+          const allUsers = await userService.getAllUsers();
+          setUsers(allUsers);
+        }
       } catch (err: any) {
         if (err.response?.status === 401) {
           navigate('/login');
@@ -74,7 +84,41 @@ const DashboardPage: React.FC = () => {
               </div>
             </div>
             
-            <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+            <div className="tasks-section" style={{ marginTop: '3rem' }}>
+              <h3>All Tasks</h3>
+              <div className="tasks-list">
+                {tasks.length === 0 ? (
+                  <p className="no-tasks">No tasks found.</p>
+                ) : (
+                  tasks.map(task => {
+                    const assignedUser = users.find(u => u.id === task.userId);
+                    return (
+                      <Link to={`/tasks/${task.id}`} key={task.id} className="task-item-link">
+                        <div className="task-item">
+                          <div className="task-info">
+                            <h4>{task.title}</h4>
+                            <span className={`status-badge status-${task.status}`}>
+                              {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
+                            </span>
+                            {task.dueDate && (
+                              <span className="due-date">
+                                Due: {new Date(task.dueDate).toLocaleDateString()}
+                              </span>
+                            )}
+                            <span className="assigned-to" style={{ marginLeft: '1rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                              Assigned To: {assignedUser ? `${assignedUser.firstName} ${assignedUser.lastName}` : 'Unknown'}
+                            </span>
+                          </div>
+                          <div className="view-detail-hint">View Details &rarr;</div>
+                        </div>
+                      </Link>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+            
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
               <Link to="/tasks" className="logout-btn" style={{ textDecoration: 'none', padding: '1rem 2rem', display: 'inline-block', backgroundColor: 'var(--terracotta)', color: 'white', border: 'none' }}>
                 Manage All Tasks &rarr;
               </Link>
@@ -100,7 +144,38 @@ const DashboardPage: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+            <div className="tasks-section" style={{ marginTop: '3rem' }}>
+              <h3>My Tasks List</h3>
+              <div className="tasks-list">
+                {tasks.length === 0 ? (
+                  <p className="no-tasks">No tasks found.</p>
+                ) : (
+                  tasks.map(task => (
+                    <Link to={`/tasks/${task.id}`} key={task.id} className="task-item-link">
+                      <div className="task-item">
+                        <div className="task-info">
+                          <h4>{task.title}</h4>
+                          <span className={`status-badge status-${task.status}`}>
+                            {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
+                          </span>
+                          <span className="due-date" style={{ marginLeft: '1rem' }}>
+                            Assigned: {new Date(task.createdAt).toLocaleDateString()}
+                          </span>
+                          {task.dueDate && (
+                            <span className="due-date" style={{ marginLeft: '1rem' }}>
+                              Due: {new Date(task.dueDate).toLocaleDateString()}
+                            </span>
+                          )}
+                        </div>
+                        <div className="view-detail-hint">View Details &rarr;</div>
+                      </div>
+                    </Link>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
               <Link to="/tasks" className="logout-btn" style={{ textDecoration: 'none', padding: '1rem 2rem', display: 'inline-block', backgroundColor: 'var(--sage-green)', color: 'white', border: 'none' }}>
                 View My Tasks &rarr;
               </Link>
