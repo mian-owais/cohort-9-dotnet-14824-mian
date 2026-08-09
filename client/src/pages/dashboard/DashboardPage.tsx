@@ -54,7 +54,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <Navbar title="Task Dashboard" />
+      <Navbar title="Dashboard" />
 
       {error && <div className="dashboard-error">{error}</div>}
 
