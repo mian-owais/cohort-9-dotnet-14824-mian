@@ -9,10 +9,12 @@ import TaskDetailPage from './pages/tasks/TaskDetailPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import AboutPage from './pages/info/AboutPage';
 import ContactPage from './pages/info/ContactPage';
+import FloatingChat from './components/FloatingChat';
 
 const App: React.FC = () => {
   return (
     <Router>
+      <FloatingChat />
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />

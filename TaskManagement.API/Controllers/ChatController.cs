@@ -19,7 +19,7 @@ namespace TaskManagement.API.Controllers
 
         public class ChatRequest
         {
-            public int TaskId { get; set; }
+            public int? TaskId { get; set; }
             public string Message { get; set; } = string.Empty;
         }
 

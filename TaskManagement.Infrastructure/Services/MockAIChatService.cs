@@ -15,8 +15,20 @@ namespace TaskManagement.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<string> AskQuestionAboutTaskAsync(int taskId, string userMessage)
+        public async Task<string> AskQuestionAboutTaskAsync(int? taskId, string userMessage)
         {
+            if (taskId == null)
+            {
+                await Task.Delay(1500);
+                return $@"**[Mock AI Response]**
+            
+I am your global AI assistant. You asked: ""{userMessage}""
+
+Since you didn't ask this from a specific task page, I don't have a task context right now.
+But as a Task Management assistant, I can help you with general questions about creating tasks, assigning them, or managing your workflow!
+";
+            }
+
             var task = await _context.TaskItems.FirstOrDefaultAsync(t => t.Id == taskId);
             
             if (task == null)

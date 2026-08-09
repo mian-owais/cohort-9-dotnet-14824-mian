@@ -4,6 +4,6 @@ namespace TaskManagement.Core.Interfaces
 {
     public interface IAIChatService
     {
-        Task<string> AskQuestionAboutTaskAsync(int taskId, string userMessage);
+        Task<string> AskQuestionAboutTaskAsync(int? taskId, string userMessage);
     }
 }
