@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 
 const ContactPage: React.FC = () => {
   const navigate = useNavigate();
@@ -11,14 +11,7 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <h1 className="dashboard-title">Contact Us</h1>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Link to="/dashboard" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Dashboard</Link>
-          <Link to="/about" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>About</Link>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
-        </div>
-      </nav>
+      <Navbar title="Contact Us" />
 
       <main className="dashboard-main" style={{ backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '12px', marginTop: '2rem' }}>
         <h2 style={{ color: 'var(--sage-green)', marginBottom: '1rem' }}>Get In Touch</h2>

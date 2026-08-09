@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { taskService } from '../../services/task.service';
 import type { TaskDto } from '../../services/task.service';
+import Navbar from '../../components/Navbar';
 import './Tasks.css';
 
 const TaskDetailPage: React.FC = () => {
@@ -45,15 +46,7 @@ const TaskDetailPage: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <h1 className="dashboard-title">Task Details</h1>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Link to="/tasks" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>My Tasks</Link>
-          <Link to="/about" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>About</Link>
-          <Link to="/contact" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Contact</Link>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
-        </div>
-      </nav>
+      <Navbar title="Task Details" />
 
       {error && <div className="dashboard-error">{error}</div>}
 

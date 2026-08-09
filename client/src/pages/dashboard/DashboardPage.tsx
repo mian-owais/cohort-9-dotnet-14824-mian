@@ -4,6 +4,7 @@ import { dashboardService } from '../../services/dashboard.service';
 import type { DashboardMetrics } from '../../services/dashboard.service';
 import { userService, type UserProfile } from '../../services/user.service';
 import { taskService, type TaskDto } from '../../services/task.service';
+import Navbar from '../../components/Navbar';
 import './Dashboard.css';
 
 const DashboardPage: React.FC = () => {
@@ -53,15 +54,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <h1 className="dashboard-title">Task Dashboard</h1>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Link to="/tasks" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>My Tasks</Link>
-          <Link to="/about" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>About</Link>
-          <Link to="/contact" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Contact</Link>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
-        </div>
-      </nav>
+      <Navbar title="Task Dashboard" />
 
       {error && <div className="dashboard-error">{error}</div>}
 

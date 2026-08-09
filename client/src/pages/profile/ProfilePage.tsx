@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { userService, type UserProfile } from '../../services/user.service';
+import Navbar from '../../components/Navbar';
 import './Profile.css';
 
 const ProfilePage: React.FC = () => {
@@ -36,15 +37,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="profile-container">
-      <nav className="profile-nav">
-        <h1 className="profile-title">User Profile</h1>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Link to="/dashboard" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Dashboard</Link>
-          <Link to="/tasks" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>My Tasks</Link>
-          <Link to="/about" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>About</Link>
-          <Link to="/contact" className="nav-link" style={{ color: 'var(--text-p)', textDecoration: 'none', fontWeight: 600 }}>Contact</Link>
-        </div>
-      </nav>
+      <Navbar title="User Profile" />
 
       {error && <div className="profile-error">{error}</div>}
 
