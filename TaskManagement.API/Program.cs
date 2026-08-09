@@ -22,9 +22,8 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 
 // Configure EF Core with SQLite for Local Dev
-var dbPath = Path.Combine(builder.Environment.ContentRootPath, "taskmanagement.db");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite($"Data Source={dbPath}"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Dependency Injection
 builder.Services.AddScoped<IAuthService, AuthService>();

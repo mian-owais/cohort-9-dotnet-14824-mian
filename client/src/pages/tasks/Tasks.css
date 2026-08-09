@@ -1,0 +1,119 @@
+.tasks-main {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-select {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--beige);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.task-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.task-item-link:hover .task-item {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.task-item {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  align-items: center;
+}
+
+.view-detail-hint {
+  color: var(--sage-green);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.nav-link {
+  color: var(--text-p);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--terracotta);
+}
+
+/* Detail Page */
+.task-detail-card {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.task-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.task-detail-header h2 {
+  margin: 0 0 1rem 0;
+  color: var(--terracotta);
+  font-size: 2rem;
+}
+
+.task-detail-body {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-p);
+  margin-bottom: 3rem;
+}
+
+.task-detail-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.back-btn {
+  background-color: transparent;
+  color: var(--text-p);
+  border: 1px solid #ccc;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.back-btn:hover {
+  opacity: 0.8;
+}
+
+/* Form Page */
+.form-card {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-card h2 {
+  color: var(--terracotta);
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
