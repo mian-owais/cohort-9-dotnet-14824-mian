@@ -12,5 +12,9 @@ public class CreateTaskDto
 
     public DateTime? DueDate { get; set; }
     
+    public Enums.TaskPriority Priority { get; set; } = Enums.TaskPriority.Normal;
+
+    public int? ProjectId { get; set; }
+    
     public int? AssignedToUserId { get; set; }
 }

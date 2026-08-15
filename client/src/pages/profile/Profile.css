@@ -133,3 +133,13 @@
   border-radius: 8px;
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 1rem;
+  }
+
+  .profile-card {
+    padding: 2rem 1rem;
+  }
+}

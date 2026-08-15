@@ -17,12 +17,22 @@ public class TaskServiceTests
         return new ApplicationDbContext(options);
     }
 
+    // Dummy IEmailService for tests
+    private class DummyEmailService : TaskManagement.Core.Interfaces.IEmailService
+    {
+        public System.Threading.Tasks.Task SendEmailAsync(string to, string subject, string body)
+        {
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+    }
+
     [Fact]
     public async System.Threading.Tasks.Task GetDashboardMetricsAsync_UserRole_ReturnsOnlyUserTasks()
     {
         // Arrange
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         context.TaskItems.AddRange(
             new TaskItem { UserId = 1, Status = Core.Enums.TaskStatus.Completed },
@@ -45,7 +55,8 @@ public class TaskServiceTests
     {
         // Arrange
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         context.TaskItems.AddRange(
             new TaskItem { UserId = 1, Status = Core.Enums.TaskStatus.Completed },
@@ -67,7 +78,8 @@ public class TaskServiceTests
     public async System.Threading.Tasks.Task GetTasksAsync_UserRole_ReturnsOnlyUserTasks()
     {
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         context.TaskItems.AddRange(
             new TaskItem { UserId = 1, Title = "User 1 Task" },
@@ -85,7 +97,8 @@ public class TaskServiceTests
     public async System.Threading.Tasks.Task CreateTaskAsync_CreatesAndReturnsTask()
     {
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         var dto = new TaskManagement.Core.DTOs.CreateTaskDto { Title = "New Task", Description = "Desc" };
         var created = await service.CreateTaskAsync(dto, 1, "User");
@@ -100,7 +113,8 @@ public class TaskServiceTests
     public async System.Threading.Tasks.Task CreateTaskAsync_AdminRole_CanAssignToOtherUser()
     {
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         var dto = new TaskManagement.Core.DTOs.CreateTaskDto { Title = "Assigned Task", AssignedToUserId = 2 };
         var created = await service.CreateTaskAsync(dto, 1, "Admin");
@@ -112,7 +126,8 @@ public class TaskServiceTests
     public async System.Threading.Tasks.Task UpdateTaskAsync_UserRole_UpdatesOwnTask()
     {
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         context.TaskItems.Add(new TaskItem { UserId = 1, Title = "Old Title" });
         await context.SaveChangesAsync();
@@ -130,7 +145,8 @@ public class TaskServiceTests
     public async System.Threading.Tasks.Task UpdateTaskAsync_UserRole_CannotUpdateOtherUserTask()
     {
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         context.TaskItems.Add(new TaskItem { UserId = 2, Title = "User 2 Task" });
         await context.SaveChangesAsync();
@@ -147,7 +163,8 @@ public class TaskServiceTests
     public async System.Threading.Tasks.Task DeleteTaskAsync_AdminRole_CanDeleteAnyTask()
     {
         var context = GetDbContext();
-        var service = new TaskService(context);
+        var emailService = new DummyEmailService();
+        var service = new TaskService(context, emailService);
 
         context.TaskItems.Add(new TaskItem { UserId = 2, Title = "User 2 Task" });
         await context.SaveChangesAsync();

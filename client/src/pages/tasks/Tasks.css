@@ -117,3 +117,38 @@
   margin-top: 0;
   margin-bottom: 2rem;
 }
+
+@media (max-width: 768px) {
+  .tasks-main {
+    padding: 0 1rem;
+  }
+
+  .filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .task-detail-card, .form-card {
+    padding: 1.5rem;
+  }
+
+  .task-detail-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .task-detail-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

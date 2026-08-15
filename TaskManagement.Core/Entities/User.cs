@@ -9,6 +9,11 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
     public string Role { get; set; } = "User"; // "Admin" or "User"
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsActive { get; set; } = true;
 
-    public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
+    // Navigation
+    public ICollection<TaskItem> AssignedTasks { get; set; } = new List<TaskItem>();
+    public ICollection<TaskItem> CreatedTasks { get; set; } = new List<TaskItem>();
+    public ICollection<Project> CreatedProjects { get; set; } = new List<Project>();
+    public ICollection<TaskComment> Comments { get; set; } = new List<TaskComment>();
 }

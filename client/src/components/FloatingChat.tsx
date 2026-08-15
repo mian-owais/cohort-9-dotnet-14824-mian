@@ -34,14 +34,15 @@ const FloatingChat: React.FC = () => {
   };
 
   return (
-    <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+    <div style={{ position: 'fixed', bottom: '1rem', right: '1rem', zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
       
       {isOpen && (
         <div style={{ 
           backgroundColor: 'var(--bg-card)', 
           border: '2px solid var(--sage-green)', 
           borderRadius: '16px', 
-          width: '350px',
+          width: '90vw',
+          maxWidth: '350px',
           boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
           marginBottom: '1rem',
           display: 'flex',

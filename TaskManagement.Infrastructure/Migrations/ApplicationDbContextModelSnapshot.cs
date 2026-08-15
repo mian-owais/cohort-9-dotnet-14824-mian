@@ -22,6 +22,87 @@ namespace TaskManagement.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("TaskManagement.Core.Entities.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ColorCode")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.TaskComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TaskItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TaskComments");
+                });
+
             modelBuilder.Entity("TaskManagement.Core.Entities.TaskItem", b =>
                 {
                     b.Property<int>("Id")
@@ -33,12 +114,21 @@ namespace TaskManagement.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -47,14 +137,36 @@ namespace TaskManagement.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("ProjectId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("TaskItems");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.TaskTag", b =>
+                {
+                    b.Property<int>("TaskItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskItemId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("TaskTags");
                 });
 
             modelBuilder.Entity("TaskManagement.Core.Entities.User", b =>
@@ -76,6 +188,9 @@ namespace TaskManagement.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -96,20 +211,106 @@ namespace TaskManagement.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TaskManagement.Core.Entities.TaskItem", b =>
+            modelBuilder.Entity("TaskManagement.Core.Entities.Project", b =>
                 {
-                    b.HasOne("TaskManagement.Core.Entities.User", "User")
-                        .WithMany("Tasks")
-                        .HasForeignKey("UserId")
+                    b.HasOne("TaskManagement.Core.Entities.User", "Creator")
+                        .WithMany("CreatedProjects")
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.TaskComment", b =>
+                {
+                    b.HasOne("TaskManagement.Core.Entities.TaskItem", "TaskItem")
+                        .WithMany("Comments")
+                        .HasForeignKey("TaskItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TaskManagement.Core.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TaskItem");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskManagement.Core.Entities.User", b =>
+            modelBuilder.Entity("TaskManagement.Core.Entities.TaskItem", b =>
+                {
+                    b.HasOne("TaskManagement.Core.Entities.User", "Creator")
+                        .WithMany("CreatedTasks")
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TaskManagement.Core.Entities.Project", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("TaskManagement.Core.Entities.User", "User")
+                        .WithMany("AssignedTasks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.TaskTag", b =>
+                {
+                    b.HasOne("TaskManagement.Core.Entities.Tag", "Tag")
+                        .WithMany("TaskTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TaskManagement.Core.Entities.TaskItem", "TaskItem")
+                        .WithMany("TaskTags")
+                        .HasForeignKey("TaskItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("TaskItem");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.Project", b =>
                 {
                     b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.Tag", b =>
+                {
+                    b.Navigation("TaskTags");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.TaskItem", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("TaskTags");
+                });
+
+            modelBuilder.Entity("TaskManagement.Core.Entities.User", b =>
+                {
+                    b.Navigation("AssignedTasks");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("CreatedProjects");
+
+                    b.Navigation("CreatedTasks");
                 });
 #pragma warning restore 612, 618
         }

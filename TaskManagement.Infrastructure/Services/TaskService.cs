@@ -8,10 +8,12 @@ namespace TaskManagement.Infrastructure.Services;
 public class TaskService : ITaskService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IEmailService _emailService;
 
-    public TaskService(ApplicationDbContext context)
+    public TaskService(ApplicationDbContext context, IEmailService emailService)
     {
         _context = context;
+        _emailService = emailService;
     }
 
     public async Task<DashboardMetricsDto> GetDashboardMetricsAsync(int userId, string role)
@@ -49,9 +51,13 @@ public class TaskService : ITaskService
             Title = t.Title,
             Description = t.Description,
             Status = t.Status,
+            Priority = t.Priority,
             CreatedAt = t.CreatedAt,
+            UpdatedAt = t.UpdatedAt,
             DueDate = t.DueDate,
-            UserId = t.UserId
+            ProjectId = t.ProjectId,
+            UserId = t.UserId,
+            CreatedByUserId = t.CreatedByUserId
         }).ToListAsync();
     }
 
@@ -71,9 +77,13 @@ public class TaskService : ITaskService
             Title = task.Title,
             Description = task.Description,
             Status = task.Status,
+            Priority = task.Priority,
             CreatedAt = task.CreatedAt,
+            UpdatedAt = task.UpdatedAt,
             DueDate = task.DueDate,
-            UserId = task.UserId
+            ProjectId = task.ProjectId,
+            UserId = task.UserId,
+            CreatedByUserId = task.CreatedByUserId
         };
     }
 
@@ -90,13 +100,35 @@ public class TaskService : ITaskService
             Title = dto.Title,
             Description = dto.Description,
             Status = Core.Enums.TaskStatus.Pending,
+            Priority = dto.Priority,
             CreatedAt = DateTime.UtcNow,
             DueDate = dto.DueDate,
-            UserId = assignedUserId
+            ProjectId = dto.ProjectId,
+            UserId = assignedUserId,
+            CreatedByUserId = userId
         };
 
         _context.TaskItems.Add(task);
         await _context.SaveChangesAsync();
+
+        // Email Notification Logic
+        if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && assignedUserId != userId)
+        {
+            try
+            {
+                var assignedUser = await _context.Users.FindAsync(assignedUserId);
+                if (assignedUser != null)
+                {
+                    var subject = "New Task Assigned: " + task.Title;
+                    var body = $"Hello,\n\nYou have been assigned a new task by an administrator.\n\nTask: {task.Title}\nDescription: {task.Description}\nDue Date: {task.DueDate?.ToString("yyyy-MM-dd") ?? "None"}\n\nPlease log in to the Task Management System to view your tasks.";
+                    await _emailService.SendEmailAsync(assignedUser.Email, subject, body);
+                }
+            }
+            catch (Exception)
+            {
+                // Silently swallow email errors so task creation still succeeds even if SMTP is misconfigured
+            }
+        }
 
         return new TaskDto
         {
@@ -104,9 +136,13 @@ public class TaskService : ITaskService
             Title = task.Title,
             Description = task.Description,
             Status = task.Status,
+            Priority = task.Priority,
             CreatedAt = task.CreatedAt,
+            UpdatedAt = task.UpdatedAt,
             DueDate = task.DueDate,
-            UserId = task.UserId
+            ProjectId = task.ProjectId,
+            UserId = task.UserId,
+            CreatedByUserId = task.CreatedByUserId
         };
     }
 
@@ -123,14 +159,43 @@ public class TaskService : ITaskService
         task.Title = dto.Title;
         task.Description = dto.Description;
         task.Status = dto.Status;
+        task.Priority = dto.Priority;
         task.DueDate = dto.DueDate;
+        task.ProjectId = dto.ProjectId;
+        task.UpdatedAt = DateTime.UtcNow;
+
+        bool wasReassigned = false;
+        var originalUserId = task.UserId;
 
         if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && dto.AssignedToUserId.HasValue)
         {
+            if (task.UserId != dto.AssignedToUserId.Value)
+            {
+                wasReassigned = true;
+            }
             task.UserId = dto.AssignedToUserId.Value;
         }
 
         await _context.SaveChangesAsync();
+
+        // Email Notification Logic for Reassignment
+        if (wasReassigned)
+        {
+            try
+            {
+                var assignedUser = await _context.Users.FindAsync(task.UserId);
+                if (assignedUser != null)
+                {
+                    var subject = "Task Re-Assigned To You: " + task.Title;
+                    var body = $"Hello,\n\nAn existing task has just been re-assigned to you by an administrator.\n\nTask: {task.Title}\nDescription: {task.Description}\nDue Date: {task.DueDate?.ToString("yyyy-MM-dd") ?? "None"}\n\nPlease log in to the Task Management System to view your tasks.";
+                    await _emailService.SendEmailAsync(assignedUser.Email, subject, body);
+                }
+            }
+            catch (Exception)
+            {
+                // Silently swallow email errors so task update still succeeds even if SMTP is misconfigured
+            }
+        }
 
         return new TaskDto
         {
@@ -138,9 +203,13 @@ public class TaskService : ITaskService
             Title = task.Title,
             Description = task.Description,
             Status = task.Status,
+            Priority = task.Priority,
             CreatedAt = task.CreatedAt,
+            UpdatedAt = task.UpdatedAt,
             DueDate = task.DueDate,
-            UserId = task.UserId
+            ProjectId = task.ProjectId,
+            UserId = task.UserId,
+            CreatedByUserId = task.CreatedByUserId
         };
     }
 

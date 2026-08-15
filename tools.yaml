@@ -1,0 +1,15 @@
+# tools.yaml
+# Google MCP Toolbox configuration
+
+sources:
+  my_db:
+    # Set your database type here: postgres, mysql, mssql, sqlite, etc.
+    type: mssql 
+    # Using SQL Express with Windows Authentication.
+    connection_string: "sqlserver://localhost\\SQLEXPRESS?database=TaskManagementDb"
+
+tools:
+  list_tables:
+    description: "List all tables in the database"
+    source: my_db
+    query: "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'"
