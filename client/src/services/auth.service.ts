@@ -19,8 +19,7 @@ export type SignupData = z.infer<typeof signupSchema>;
 export const authService = {
   login: async (data: LoginData) => {
     const response = await api.post('/auth/login', data);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+    if (response.data.user) {
       localStorage.setItem('user', JSON.stringify(response.data.user));
     }
     return response.data;
@@ -31,8 +30,12 @@ export const authService = {
     return response.data;
   },
 
-  logout: () => {
-    localStorage.removeItem('token');
+  logout: async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (e) {
+      console.error('Logout error', e);
+    }
     localStorage.removeItem('user');
   },
 

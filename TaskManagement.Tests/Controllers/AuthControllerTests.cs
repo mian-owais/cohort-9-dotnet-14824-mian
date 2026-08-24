@@ -16,6 +16,10 @@ public class AuthControllerTests
     {
         _authServiceMock = new Mock<IAuthService>();
         _controller = new AuthController(_authServiceMock.Object);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new Microsoft.AspNetCore.Http.DefaultHttpContext()
+        };
     }
 
     [Fact]

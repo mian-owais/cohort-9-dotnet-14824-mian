@@ -21,7 +21,7 @@ public class TaskService : ITaskService
         var query = _context.TaskItems.AsQueryable();
 
         // If the user is not an Admin, restrict the query to only their tasks
-        if (!role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase))
         {
             query = query.Where(t => t.UserId == userId);
         }
@@ -40,7 +40,7 @@ public class TaskService : ITaskService
     {
         var query = _context.TaskItems.AsQueryable();
 
-        if (!role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase))
         {
             query = query.Where(t => t.UserId == userId);
         }
@@ -66,7 +66,7 @@ public class TaskService : ITaskService
         var task = await _context.TaskItems.FindAsync(taskId);
         if (task == null) return null;
 
-        if (!role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && task.UserId != userId)
+        if (!string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) && task.UserId != userId)
         {
             return null; // Unauthorized to view this task
         }
@@ -90,7 +90,7 @@ public class TaskService : ITaskService
     public async Task<TaskDto> CreateTaskAsync(CreateTaskDto dto, int userId, string role)
     {
         int assignedUserId = userId;
-        if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && dto.AssignedToUserId.HasValue)
+        if (string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) && dto.AssignedToUserId.HasValue)
         {
             assignedUserId = dto.AssignedToUserId.Value;
         }
@@ -112,7 +112,7 @@ public class TaskService : ITaskService
         await _context.SaveChangesAsync();
 
         // Email Notification Logic
-        if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && assignedUserId != userId)
+        if (string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) && assignedUserId != userId)
         {
             try
             {
@@ -151,7 +151,7 @@ public class TaskService : ITaskService
         var task = await _context.TaskItems.FindAsync(taskId);
         if (task == null) return null;
 
-        if (!role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && task.UserId != userId)
+        if (!string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) && task.UserId != userId)
         {
             return null; // Unauthorized to update this task
         }
@@ -167,7 +167,7 @@ public class TaskService : ITaskService
         bool wasReassigned = false;
         var originalUserId = task.UserId;
 
-        if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && dto.AssignedToUserId.HasValue)
+        if (string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) && dto.AssignedToUserId.HasValue)
         {
             if (task.UserId != dto.AssignedToUserId.Value)
             {
@@ -218,7 +218,7 @@ public class TaskService : ITaskService
         var task = await _context.TaskItems.FindAsync(taskId);
         if (task == null) return false;
 
-        if (!role.Equals("Admin", StringComparison.OrdinalIgnoreCase) && task.UserId != userId)
+        if (!string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) && task.UserId != userId)
         {
             return false; // Unauthorized to delete this task
         }

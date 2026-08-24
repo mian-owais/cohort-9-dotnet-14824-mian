@@ -18,6 +18,7 @@ const TaskFormPage: React.FC = () => {
   });
   const [loading, setLoading] = useState(true); // default to true since we fetch user profile
   const [error, setError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [users, setUsers] = useState<UserProfile[]>([]);
 
@@ -54,6 +55,8 @@ const TaskFormPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
+    setError('');
     try {
       if (isEditing && id) {
         await taskService.updateTask(Number(id), {
@@ -76,11 +79,13 @@ const TaskFormPage: React.FC = () => {
     } catch (err) {
       console.error(err);
       setError('Failed to save task.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
@@ -117,8 +122,9 @@ const TaskFormPage: React.FC = () => {
 
             {isEditing && (
               <div className="form-group">
-                <label>Status</label>
+                <label htmlFor="status">Status</label>
                 <select
+                  id="status"
                   value={formData.status}
                   onChange={e => setFormData({ ...formData, status: Number(e.target.value) })}
                 >
@@ -130,8 +136,9 @@ const TaskFormPage: React.FC = () => {
             )}
 
             <div className="form-group">
-              <label>Due Date</label>
+              <label htmlFor="dueDate">Due Date</label>
               <input
+                id="dueDate"
                 type="date"
                 value={formData.dueDate}
                 onChange={e => setFormData({ ...formData, dueDate: e.target.value })}
@@ -140,8 +147,9 @@ const TaskFormPage: React.FC = () => {
 
             {currentUser?.role === 'Admin' && (
               <div className="form-group">
-                <label>Assign To</label>
+                <label htmlFor="assignedToUserId">Assign To</label>
                 <select
+                  id="assignedToUserId"
                   value={formData.assignedToUserId}
                   onChange={e => setFormData({ ...formData, assignedToUserId: e.target.value })}
                 >
@@ -154,8 +162,10 @@ const TaskFormPage: React.FC = () => {
             )}
 
             <div className="modal-actions">
-              <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>Cancel</button>
-              <button type="submit" className="save-btn">Save Task</button>
+              <button type="button" className="cancel-btn" onClick={() => navigate(-1)} disabled={isSaving}>Cancel</button>
+              <button type="submit" className="save-btn" disabled={isSaving}>
+                {isSaving ? 'Saving...' : 'Save Task'}
+              </button>
             </div>
           </form>
         </div>

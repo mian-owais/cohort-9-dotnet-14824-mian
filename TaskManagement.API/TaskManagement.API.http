@@ -1,6 +1,25 @@
 @TaskManagement.API_HostAddress = http://localhost:5224
 
-GET {{TaskManagement.API_HostAddress}}/weatherforecast/
+POST {{TaskManagement.API_HostAddress}}/api/auth/register
+Content-Type: application/json
 Accept: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "testuser@example.com",
+  "password": "Password123!"
+}
+
+###
+
+POST {{TaskManagement.API_HostAddress}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "Password123!"
+}
 
 ###

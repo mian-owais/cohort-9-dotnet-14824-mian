@@ -34,11 +34,24 @@ public class AuthController : ControllerBase
 
             var token = await _authService.RegisterAsync(user, model.Password);
             
-            return Ok(new { Token = token, User = new { user.Id, user.FirstName, user.LastName, user.Email, user.Role } });
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddHours(2)
+            };
+            Response.Cookies.Append("jwt", token, cookieOptions);
+
+            return Ok(new { User = new { user.Id, user.FirstName, user.LastName, user.Email, user.Role } });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { Message = ex.Message });
+            if (ex.Message == "Email is already registered.")
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            return StatusCode(500, new { Message = "Internal Server Error" });
         }
     }
 
@@ -51,13 +64,42 @@ public class AuthController : ControllerBase
         try
         {
             var token = await _authService.LoginAsync(model.Email, model.Password);
-            // In a real application, you might want to fetch user details to return alongside the token
-            // For simplicity, we just return the token here (the frontend can decode it, or we could fetch the user)
-            return Ok(new { Token = token });
+            
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Set to true since frontend requires it for SameSite=None
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddHours(2)
+            };
+            Response.Cookies.Append("jwt", token, cookieOptions);
+
+            // Return user details or just success response (without the token)
+            // Ideally we'd return User object here too, but to minimize changes from original logic
+            // we will just return success message or dummy token field to not break existing frontend models
+            return Ok(new { Message = "Logged in successfully", Token = "" });
         }
         catch (Exception ex)
         {
-            return Unauthorized(new { Message = ex.Message });
+            if (ex.Message == "Invalid email or password.")
+            {
+                return Unauthorized(new { Message = ex.Message });
+            }
+            return StatusCode(500, new { Message = "Internal Server Error" });
         }
+    }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = DateTime.UtcNow.AddDays(-1)
+        };
+        Response.Cookies.Append("jwt", "", cookieOptions);
+        return Ok(new { Message = "Logged out successfully" });
     }
 }

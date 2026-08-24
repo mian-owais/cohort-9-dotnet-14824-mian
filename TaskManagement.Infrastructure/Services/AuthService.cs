@@ -24,6 +24,10 @@ public class AuthService : IAuthService
 
     public async Task<string> RegisterAsync(User user, string password)
     {
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
         if (await _context.Users.AnyAsync(u => u.Email == user.Email))
         {
             throw new Exception("Email is already registered.");
