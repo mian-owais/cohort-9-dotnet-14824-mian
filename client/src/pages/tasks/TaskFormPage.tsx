@@ -13,8 +13,10 @@ const TaskFormPage: React.FC = () => {
     title: '',
     description: '',
     status: 0,
+    priority: 0,
     dueDate: '',
-    assignedToUserId: ''
+    assignedToUserId: '',
+    projectId: ''
   });
   const [loading, setLoading] = useState(true); // default to true since we fetch user profile
   const [error, setError] = useState('');
@@ -39,8 +41,10 @@ const TaskFormPage: React.FC = () => {
             title: data.title,
             description: data.description,
             status: data.status,
+            priority: data.priority,
             dueDate: data.dueDate ? new Date(data.dueDate).toISOString().split('T')[0] : '',
-            assignedToUserId: data.userId ? data.userId.toString() : ''
+            assignedToUserId: data.userId ? data.userId.toString() : '',
+            projectId: data.projectId ? data.projectId.toString() : ''
           });
         }
       } catch (err: any) {
@@ -63,16 +67,20 @@ const TaskFormPage: React.FC = () => {
           title: formData.title,
           description: formData.description,
           status: Number(formData.status),
+          priority: Number(formData.priority),
           dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
-          assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined
+          assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined,
+          projectId: formData.projectId ? Number(formData.projectId) : null
         });
         navigate(`/tasks/${id}`);
       } else {
         await taskService.createTask({
           title: formData.title,
           description: formData.description,
+          priority: Number(formData.priority),
           dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
-          assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined
+          assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined,
+          projectId: formData.projectId ? Number(formData.projectId) : null
         });
         navigate('/tasks');
       }
@@ -137,6 +145,19 @@ const TaskFormPage: React.FC = () => {
                 </select>
               </div>
             )}
+
+            <div className="form-group">
+              <label htmlFor="priority">Priority</label>
+              <select
+                id="priority"
+                value={formData.priority}
+                onChange={e => setFormData({ ...formData, priority: Number(e.target.value) })}
+              >
+                <option value={0}>Low</option>
+                <option value={1}>Medium</option>
+                <option value={2}>High</option>
+              </select>
+            </div>
 
             <div className="form-group">
               <label htmlFor="dueDate">Due Date</label>

@@ -5,24 +5,30 @@ export interface TaskDto {
   title: string;
   description: string;
   status: number; // 0 = Pending, 1 = InProgress, 2 = Completed
+  priority: number; // 0 = Low, 1 = Medium, 2 = High
   createdAt: string;
   dueDate: string | null;
   userId: number;
+  projectId: number | null;
 }
 
 export interface CreateTaskDto {
   title: string;
   description: string;
+  priority: number;
   dueDate: string | null;
   assignedToUserId?: number;
+  projectId?: number | null;
 }
 
 export interface UpdateTaskDto {
   title: string;
   description: string;
   status: number;
+  priority: number;
   dueDate: string | null;
   assignedToUserId?: number;
+  projectId?: number | null;
 }
 
 export const taskService = {

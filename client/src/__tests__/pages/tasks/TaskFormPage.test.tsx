@@ -66,7 +66,9 @@ describe('TaskFormPage', () => {
         title: 'New Test Task',
         description: 'Description',
         dueDate: null,
-        assignedToUserId: undefined
+        assignedToUserId: undefined,
+        priority: 0,
+        projectId: null
       });
     });
   });
