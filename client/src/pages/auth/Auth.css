@@ -9,7 +9,7 @@
 }
 
 .auth-card {
-  background: var(--beige);
+  background: var(--code-bg);
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 3rem;
   border-radius: 16px;
@@ -47,7 +47,7 @@
 }
 
 .form-input {
-  background: #ffffff;
+  background: var(--bg);
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.8rem 1rem;
   border-radius: 8px;

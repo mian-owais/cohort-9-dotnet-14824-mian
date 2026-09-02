@@ -92,17 +92,19 @@ const DashboardPage: React.FC = () => {
                         <div className="task-item">
                           <div className="task-info">
                             <h4>{task.title}</h4>
-                            <span className={`status-badge status-${task.status}`}>
-                              {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
-                            </span>
-                            {task.dueDate && (
-                              <span className="due-date">
-                                Due: {new Date(task.dueDate).toLocaleDateString()}
+                            <div className="task-meta">
+                              <span className={`status-badge status-${task.status}`}>
+                                {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
                               </span>
-                            )}
-                            <span className="assigned-to" style={{ marginLeft: '1rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                              Assigned To: {assignedUser ? `${assignedUser.firstName} ${assignedUser.lastName}` : 'Unknown'}
-                            </span>
+                              {task.dueDate && (
+                                <span className="meta-item">
+                                  Due: {new Date(task.dueDate).toLocaleDateString()}
+                                </span>
+                              )}
+                              <span className="meta-item">
+                                Assigned To: {assignedUser ? `${assignedUser.firstName} ${assignedUser.lastName}` : 'Unknown'}
+                              </span>
+                            </div>
                           </div>
                           <div className="view-detail-hint">View Details &rarr;</div>
                         </div>
@@ -150,17 +152,19 @@ const DashboardPage: React.FC = () => {
                       <div className="task-item">
                         <div className="task-info">
                           <h4>{task.title}</h4>
-                          <span className={`status-badge status-${task.status}`}>
-                            {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
-                          </span>
-                          <span className="due-date" style={{ marginLeft: '1rem' }}>
-                            Assigned: {new Date(task.createdAt).toLocaleDateString()}
-                          </span>
-                          {task.dueDate && (
-                            <span className="due-date" style={{ marginLeft: '1rem' }}>
-                              Due: {new Date(task.dueDate).toLocaleDateString()}
+                          <div className="task-meta">
+                            <span className={`status-badge status-${task.status}`}>
+                              {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
                             </span>
-                          )}
+                            <span className="meta-item">
+                              Assigned: {new Date(task.createdAt).toLocaleDateString()}
+                            </span>
+                            {task.dueDate && (
+                              <span className="meta-item">
+                                Due: {new Date(task.dueDate).toLocaleDateString()}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <div className="view-detail-hint">View Details &rarr;</div>
                       </div>

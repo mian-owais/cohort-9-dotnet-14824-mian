@@ -54,7 +54,7 @@
 
 /* Detail Page */
 .task-detail-card {
-  background-color: white;
+  background-color: var(--code-bg);
   padding: 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -104,7 +104,7 @@
 
 /* Form Page */
 .form-card {
-  background-color: white;
+  background-color: var(--code-bg);
   padding: 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -150,5 +150,6 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding: 1rem;
   }
 }

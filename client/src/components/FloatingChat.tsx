@@ -38,7 +38,7 @@ const FloatingChat: React.FC = () => {
       
       {isOpen && (
         <div style={{ 
-          backgroundColor: 'var(--bg-card)', 
+          backgroundColor: 'var(--bg)', 
           border: '2px solid var(--sage-green)', 
           borderRadius: '16px', 
           width: '90vw',
@@ -56,17 +56,17 @@ const FloatingChat: React.FC = () => {
             <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', padding: 0 }}>×</button>
           </div>
 
-          <div className="chat-history" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', height: '300px', overflowY: 'auto', backgroundColor: '#fafafa' }}>
+          <div className="chat-history" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', height: '300px', overflowY: 'auto', backgroundColor: 'var(--bg)' }}>
             {chatMessages.length === 0 && (
-              <p style={{ color: 'var(--text-p)', fontStyle: 'italic', textAlign: 'center', margin: 'auto' }}>
+              <p style={{ color: 'var(--text)', fontStyle: 'italic', textAlign: 'center', margin: 'auto' }}>
                 {taskId ? "Ask me anything about this task!" : "Ask me a general question about task management!"}
               </p>
             )}
             {chatMessages.map((msg, index) => (
               <div key={index} style={{ 
                 alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                backgroundColor: msg.role === 'user' ? 'var(--terracotta)' : '#e0e0e0',
-                color: msg.role === 'user' ? '#fff' : 'var(--text)',
+                backgroundColor: msg.role === 'user' ? 'var(--terracotta)' : 'var(--code-bg)',
+                color: msg.role === 'user' ? '#fff' : 'var(--text-h)',
                 padding: '0.5rem 0.75rem',
                 borderRadius: '12px',
                 maxWidth: '85%',
@@ -76,17 +76,17 @@ const FloatingChat: React.FC = () => {
               </div>
             ))}
             {isChatLoading && (
-              <div style={{ alignSelf: 'flex-start', color: 'var(--text-p)', fontStyle: 'italic', fontSize: '0.8rem' }}>AI is typing...</div>
+              <div style={{ alignSelf: 'flex-start', color: 'var(--text)', fontStyle: 'italic', fontSize: '0.8rem' }}>AI is typing...</div>
             )}
           </div>
 
-          <form onSubmit={handleAskChat} style={{ display: 'flex', padding: '0.75rem', borderTop: '1px solid #eee', backgroundColor: 'white' }}>
+          <form onSubmit={handleAskChat} style={{ display: 'flex', padding: '0.75rem', borderTop: '1px solid var(--border)', backgroundColor: 'var(--bg)' }}>
             <input 
               type="text" 
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               placeholder="Type a message..." 
-              style={{ flex: 1, padding: '0.5rem', borderRadius: '8px', border: '1px solid #ccc', outline: 'none' }}
+              style={{ flex: 1, padding: '0.5rem', borderRadius: '8px', border: '1px solid var(--border)', outline: 'none', backgroundColor: 'var(--code-bg)', color: 'var(--text-h)' }}
               disabled={isChatLoading}
             />
             <button 

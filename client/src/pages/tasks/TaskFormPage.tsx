@@ -99,6 +99,9 @@ const TaskFormPage: React.FC = () => {
 
       <main className="tasks-main">
         <div className="form-card">
+          <div style={{ display: 'flex', marginBottom: '1rem' }}>
+             <button type="button" onClick={() => navigate(-1)} className="back-btn" style={{ padding: '0.5rem 1rem' }}>&larr; Back</button>
+          </div>
           <form onSubmit={handleSubmit} className="task-form">
             <div className="form-group">
               <label htmlFor="title">Title</label>

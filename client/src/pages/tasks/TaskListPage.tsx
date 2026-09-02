@@ -71,14 +71,16 @@ const TaskListPage: React.FC = () => {
                 <div className="task-item">
                   <div className="task-info">
                     <h4>{task.title}</h4>
-                    <span className={`status-badge status-${task.status}`}>
-                      {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
-                    </span>
-                    {task.dueDate && (
-                      <span className="due-date">
-                        Due: {new Date(task.dueDate).toLocaleDateString()}
+                    <div className="task-meta">
+                      <span className={`status-badge status-${task.status}`}>
+                        {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
                       </span>
-                    )}
+                      {task.dueDate && (
+                        <span className="meta-item">
+                          Due: {new Date(task.dueDate).toLocaleDateString()}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="view-detail-hint">View Details &rarr;</div>
                 </div>

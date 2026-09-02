@@ -38,4 +38,12 @@ public class DashboardController : ControllerBase
         
         return Ok(metrics);
     }
+
+    [HttpGet("admin-metrics")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAdminMetrics()
+    {
+        var adminMetrics = await _taskService.GetAdminUserMetricsAsync();
+        return Ok(adminMetrics);
+    }
 }

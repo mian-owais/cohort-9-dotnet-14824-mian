@@ -32,7 +32,7 @@
 }
 
 .contact-info-card {
-  background: white;
+  background: var(--code-bg);
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -64,7 +64,7 @@
 }
 
 .contact-form-card {
-  background: white;
+  background: var(--code-bg);
   padding: 3rem;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -98,6 +98,8 @@
   outline: none;
   font-size: 1rem;
   font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
   transition: all 0.3s ease;
   box-sizing: border-box;
 }

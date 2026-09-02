@@ -36,6 +36,24 @@ public class TaskService : ITaskService
         return metrics;
     }
 
+    public async Task<IEnumerable<UserDashboardMetricsDto>> GetAdminUserMetricsAsync()
+    {
+        var users = await _context.Users.ToListAsync();
+        var tasks = await _context.TaskItems.ToListAsync();
+        
+        var userMetrics = users.Select(u => new UserDashboardMetricsDto
+        {
+            UserId = u.Id,
+            Name = $"{u.FirstName} {u.LastName}".Trim(),
+            Email = u.Email,
+            CompletedTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskStatus.Completed),
+            InProgressTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskStatus.InProgress),
+            PendingTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskStatus.Pending)
+        }).ToList();
+        
+        return userMetrics;
+    }
+
     public async Task<IEnumerable<TaskDto>> GetTasksAsync(int userId, string role)
     {
         var query = _context.TaskItems.AsQueryable();

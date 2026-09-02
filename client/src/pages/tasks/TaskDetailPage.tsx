@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { taskService } from '../../services/task.service';
 import type { TaskDto } from '../../services/task.service';
 import Navbar from '../../components/Navbar';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import './Tasks.css';
 
 const TaskDetailPage: React.FC = () => {
@@ -75,10 +76,14 @@ const TaskDetailPage: React.FC = () => {
 
       {task && (
         <main className="tasks-main">
-          <div className="task-detail-card">
-            <div className="task-detail-header">
-              <div>
-                <h2>{task.title}</h2>
+          <div className="task-detail-card" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 500px' }}>
+              <div className="task-detail-header">
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                    <button onClick={() => navigate(-1)} className="back-btn" style={{ padding: '0.5rem 1rem' }}>&larr; Back</button>
+                    <h2 style={{ margin: 0 }}>{task.title}</h2>
+                  </div>
                 <span className={`status-badge status-${task.status}`}>
                   {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
                 </span>
@@ -94,13 +99,72 @@ const TaskDetailPage: React.FC = () => {
               {task.description ? <p>{task.description}</p> : <p style={{ fontStyle: 'italic', color: '#888' }}>No description provided.</p>}
             </div>
 
-            <div className="task-detail-actions">
-              <Link to={`/tasks/${task.id}/edit`} className="edit-btn" style={{ textDecoration: 'none' }}>Edit Task</Link>
-              <button onClick={handleDelete} className="delete-btn">Delete Task</button>
+              <div className="task-detail-actions">
+                <Link to={`/tasks/${task.id}/edit`} className="edit-btn" style={{ textDecoration: 'none' }}>Edit Task</Link>
+                <button onClick={handleDelete} className="delete-btn">Delete Task</button>
+              </div>
+            </div>
+
+            <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', alignItems: 'center', borderLeft: '1px solid var(--border)', paddingLeft: '2rem' }}>
+              <h3 style={{ color: 'var(--text-h)', marginBottom: '1rem', marginTop: 0 }}>Progress Graph</h3>
+              {task.dueDate ? (() => {
+                  const created = new Date(task.createdAt).getTime();
+                  const due = new Date(task.dueDate).getTime();
+                  const now = Date.now();
+                  
+                  let chartData = [];
+                  let colors = ['#E2725B', '#8A9A5B']; // Elapsed, Remaining
+                  
+                  if (now >= due) {
+                      chartData = [{ name: 'Overdue / Time Passed', value: 1 }];
+                      colors = ['#c62828'];
+                  } else {
+                      const elapsed = Math.max(0, now - created);
+                      const remaining = Math.max(0, due - now);
+                      chartData = [
+                          { name: 'Time Elapsed', value: elapsed },
+                          { name: 'Time Remaining', value: remaining }
+                      ];
+                  }
+
+                  return (
+                      <div style={{ width: '100%', height: 250 }}>
+                          <ResponsiveContainer>
+                              <PieChart>
+                                  <Pie
+                                      data={chartData}
+                                      cx="50%"
+                                      cy="50%"
+                                      innerRadius={60}
+                                      outerRadius={90}
+                                      paddingAngle={2}
+                                      dataKey="value"
+                                  >
+                                      {chartData.map((entry, index) => (
+                                          <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                                      ))}
+                                  </Pie>
+                                  <Tooltip 
+                                    contentStyle={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text-h)' }}
+                                    itemStyle={{ color: 'var(--text-h)' }}
+                                    formatter={(value, name) => {
+                                        if (name === 'Overdue / Time Passed') return ['100%', name];
+                                        const total = chartData[0].value + chartData[1].value;
+                                        const percent = ((Number(value) / total) * 100).toFixed(1);
+                                        return [`${percent}%`, name];
+                                    }}
+                                  />
+                              </PieChart>
+                          </ResponsiveContainer>
+                      </div>
+                  );
+              })() : (
+                  <p style={{ color: 'var(--text-p)', fontStyle: 'italic', textAlign: 'center', marginTop: '2rem' }}>No due date set.<br/>Add a due date to see time progress.</p>
+              )}
             </div>
           </div>
 
-          <div className="chat-container" style={{ marginTop: '2rem', backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--sage-green)' }}>
+          <div className="chat-container" style={{ marginTop: '2rem', backgroundColor: 'var(--bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--sage-green)' }}>
             <h3 style={{ color: 'var(--terracotta)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               🤖 Task AI Assistant (Mock RAG)
             </h3>
@@ -112,8 +176,8 @@ const TaskDetailPage: React.FC = () => {
               {chatMessages.map((msg, index) => (
                 <div key={index} style={{ 
                   alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                  backgroundColor: msg.role === 'user' ? 'var(--terracotta)' : '#f0f0f0',
-                  color: msg.role === 'user' ? '#fff' : 'var(--text)',
+                  backgroundColor: msg.role === 'user' ? 'var(--terracotta)' : 'var(--code-bg)',
+                  color: msg.role === 'user' ? '#fff' : 'var(--text-h)',
                   padding: '0.75rem 1rem',
                   borderRadius: '12px',
                   maxWidth: '80%'
@@ -125,7 +189,7 @@ const TaskDetailPage: React.FC = () => {
                 </div>
               ))}
               {isChatLoading && (
-                <div style={{ alignSelf: 'flex-start', color: 'var(--text-p)', fontStyle: 'italic' }}>AI is thinking...</div>
+                <div style={{ alignSelf: 'flex-start', color: 'var(--text)', fontStyle: 'italic' }}>AI is thinking...</div>
               )}
             </div>
 
@@ -135,7 +199,7 @@ const TaskDetailPage: React.FC = () => {
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 placeholder="How do I start this task?" 
-                style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid #ccc', fontSize: '1rem' }}
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', backgroundColor: 'var(--code-bg)', color: 'var(--text-h)', fontSize: '1rem' }}
                 disabled={isChatLoading}
               />
               <button 

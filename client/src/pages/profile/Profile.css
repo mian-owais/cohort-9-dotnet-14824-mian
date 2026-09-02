@@ -35,7 +35,7 @@
 }
 
 .profile-card {
-  background: white;
+  background: var(--code-bg);
   border-radius: 12px;
   padding: 3rem 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -71,7 +71,7 @@
 
 .profile-role {
   display: inline-block;
-  background-color: var(--beige);
+  background-color: var(--code-bg);
   color: var(--terracotta);
   padding: 0.25rem 1rem;
   border-radius: 20px;
