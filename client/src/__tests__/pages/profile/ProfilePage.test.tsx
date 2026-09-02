@@ -81,7 +81,7 @@ describe('ProfilePage', () => {
 
     fireEvent.click(screen.getByText('Log Out'));
     
-    expect(localStorage.removeItem).toHaveBeenCalledWith('token');
+    expect(localStorage.removeItem).toHaveBeenCalledWith('user');
     expect(mockNavigate).toHaveBeenCalledWith('/login');
   });
 });
