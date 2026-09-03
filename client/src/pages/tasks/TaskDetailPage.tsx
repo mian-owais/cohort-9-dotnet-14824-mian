@@ -115,9 +115,12 @@ const TaskDetailPage: React.FC = () => {
                   let chartData = [];
                   let colors = ['#E2725B', '#8A9A5B']; // Elapsed, Remaining
                   
-                  if (now >= due) {
+                  if (task.status === 2) {
+                      chartData = [{ name: 'Task Completed', value: 1 }];
+                      colors = ['#8A9A5B']; // Green
+                  } else if (now >= due) {
                       chartData = [{ name: 'Overdue / Time Passed', value: 1 }];
-                      colors = ['#c62828'];
+                      colors = ['#c62828']; // Red
                   } else {
                       const elapsed = Math.max(0, now - created);
                       const remaining = Math.max(0, due - now);

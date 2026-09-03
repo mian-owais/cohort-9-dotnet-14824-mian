@@ -25,9 +25,9 @@ namespace TaskManagement.Infrastructure.Services
             var username = _configuration["SmtpSettings:Username"];
             var password = _configuration["SmtpSettings:Password"];
 
-            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || password == "YOUR_SMTP_PASSWORD_HERE")
             {
-                _logger.LogWarning("SMTP Settings are not fully configured. Email was not sent.");
+                _logger.LogWarning("SMTP Settings are not fully configured (using default/dummy password). Email was not sent, simulating success.");
                 // Simulating success if credentials are not configured, so the UI doesn't crash for the user while they test it locally without credentials.
                 // In production, you would throw an exception here.
                 return;
