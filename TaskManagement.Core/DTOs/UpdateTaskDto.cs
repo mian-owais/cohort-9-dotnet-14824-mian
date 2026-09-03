@@ -11,7 +11,7 @@ public class UpdateTaskDto
 
     public string Description { get; set; } = string.Empty;
 
-    public Enums.TaskStatus Status { get; set; }
+    public Enums.TaskItemStatus Status { get; set; }
 
     public DateTime? DueDate { get; set; }
     

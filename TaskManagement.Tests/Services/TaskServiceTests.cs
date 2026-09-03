@@ -35,9 +35,9 @@ public class TaskServiceTests
         var service = new TaskService(context, emailService);
 
         context.TaskItems.AddRange(
-            new TaskItem { UserId = 1, Status = Core.Enums.TaskStatus.Completed },
-            new TaskItem { UserId = 1, Status = Core.Enums.TaskStatus.InProgress },
-            new TaskItem { UserId = 2, Status = Core.Enums.TaskStatus.Pending } // Different user
+            new TaskItem { UserId = 1, Status = Core.Enums.TaskItemStatus.Completed },
+            new TaskItem { UserId = 1, Status = Core.Enums.TaskItemStatus.InProgress },
+            new TaskItem { UserId = 2, Status = Core.Enums.TaskItemStatus.Pending } // Different user
         );
         await context.SaveChangesAsync();
 
@@ -59,9 +59,9 @@ public class TaskServiceTests
         var service = new TaskService(context, emailService);
 
         context.TaskItems.AddRange(
-            new TaskItem { UserId = 1, Status = Core.Enums.TaskStatus.Completed },
-            new TaskItem { UserId = 1, Status = Core.Enums.TaskStatus.InProgress },
-            new TaskItem { UserId = 2, Status = Core.Enums.TaskStatus.Pending } // Different user
+            new TaskItem { UserId = 1, Status = Core.Enums.TaskItemStatus.Completed },
+            new TaskItem { UserId = 1, Status = Core.Enums.TaskItemStatus.InProgress },
+            new TaskItem { UserId = 2, Status = Core.Enums.TaskItemStatus.Pending } // Different user
         );
         await context.SaveChangesAsync();
 
@@ -133,12 +133,12 @@ public class TaskServiceTests
         await context.SaveChangesAsync();
         var taskId = context.TaskItems.First().Id;
 
-        var dto = new TaskManagement.Core.DTOs.UpdateTaskDto { Title = "New Title", Status = TaskManagement.Core.Enums.TaskStatus.InProgress };
+        var dto = new TaskManagement.Core.DTOs.UpdateTaskDto { Title = "New Title", Status = TaskManagement.Core.Enums.TaskItemStatus.InProgress };
         var updated = await service.UpdateTaskAsync(taskId, dto, 1, "User");
 
         Assert.NotNull(updated);
         Assert.Equal("New Title", updated.Title);
-        Assert.Equal(TaskManagement.Core.Enums.TaskStatus.InProgress, updated.Status);
+        Assert.Equal(TaskManagement.Core.Enums.TaskItemStatus.InProgress, updated.Status);
     }
 
     [Fact]

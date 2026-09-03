@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 
-namespace TaskManagement.Core.Interfaces
+namespace TaskManagement.Core.Interfaces;
+
+public interface IAIChatService
 {
-    public interface IAIChatService
-    {
-        Task<string> AskQuestionAboutTaskAsync(int? taskId, string userMessage);
-    }
+    Task<string> AskQuestionAboutTaskAsync(int? taskId, string userMessage);
 }

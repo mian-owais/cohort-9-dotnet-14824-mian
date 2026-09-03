@@ -7,7 +7,7 @@ public class TaskItem
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public Enums.TaskStatus Status { get; set; } = Enums.TaskStatus.Pending;
+    public Enums.TaskItemStatus Status { get; set; } = Enums.TaskItemStatus.Pending;
     public Enums.TaskPriority Priority { get; set; } = Enums.TaskPriority.Normal;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }

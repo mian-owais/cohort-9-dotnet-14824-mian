@@ -28,9 +28,9 @@ public class TaskService : ITaskService
 
         var metrics = new DashboardMetricsDto
         {
-            CompletedTaskCount = await query.CountAsync(t => t.Status == Core.Enums.TaskStatus.Completed),
-            InProgressTaskCount = await query.CountAsync(t => t.Status == Core.Enums.TaskStatus.InProgress),
-            PendingTaskCount = await query.CountAsync(t => t.Status == Core.Enums.TaskStatus.Pending)
+            CompletedTaskCount = await query.CountAsync(t => t.Status == Core.Enums.TaskItemStatus.Completed),
+            InProgressTaskCount = await query.CountAsync(t => t.Status == Core.Enums.TaskItemStatus.InProgress),
+            PendingTaskCount = await query.CountAsync(t => t.Status == Core.Enums.TaskItemStatus.Pending)
         };
 
         return metrics;
@@ -46,9 +46,9 @@ public class TaskService : ITaskService
             UserId = u.Id,
             Name = $"{u.FirstName} {u.LastName}".Trim(),
             Email = u.Email,
-            CompletedTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskStatus.Completed),
-            InProgressTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskStatus.InProgress),
-            PendingTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskStatus.Pending)
+            CompletedTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskItemStatus.Completed),
+            InProgressTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskItemStatus.InProgress),
+            PendingTaskCount = tasks.Count(t => t.UserId == u.Id && t.Status == Core.Enums.TaskItemStatus.Pending)
         }).ToList();
         
         return userMetrics;
@@ -117,7 +117,7 @@ public class TaskService : ITaskService
         {
             Title = dto.Title,
             Description = dto.Description,
-            Status = Core.Enums.TaskStatus.Pending,
+            Status = Core.Enums.TaskItemStatus.Pending,
             Priority = dto.Priority,
             CreatedAt = DateTime.UtcNow,
             DueDate = dto.DueDate,
