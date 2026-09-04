@@ -36,7 +36,7 @@ const DashboardPage: React.FC = () => {
         if (err.response?.status === 401) {
           navigate('/login');
         } else {
-          setError('Failed to load dashboard data.');
+          setError('Failed to load dashboard data. Error: ' + (err.message || String(err)));
         }
       } finally {
         setLoading(false);
