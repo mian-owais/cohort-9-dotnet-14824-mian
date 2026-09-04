@@ -65,6 +65,7 @@ describe('TaskFormPage', () => {
       expect(taskService.createTask).toHaveBeenCalledWith({
         title: 'New Test Task',
         description: 'Description',
+        category: 'General',
         dueDate: null,
         assignedToUserId: undefined,
         priority: 0,
