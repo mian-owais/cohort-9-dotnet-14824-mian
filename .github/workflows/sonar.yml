@@ -50,6 +50,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"TaskManagementTool" /o:"mian-owais" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          if (-not $env:SONAR_TOKEN) {
+            Write-Host "SONAR_TOKEN is not set. Running build without SonarCloud analysis."
+            dotnet build TaskManagementTool.sln
+            exit 0
+          }
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"TaskManagementTool" /o:"mian-owais" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
           dotnet build TaskManagementTool.sln
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
