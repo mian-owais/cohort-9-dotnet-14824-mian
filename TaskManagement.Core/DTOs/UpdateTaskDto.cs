@@ -13,6 +13,8 @@ public class UpdateTaskDto
 
     public Enums.TaskItemStatus Status { get; set; }
 
+    public string Category { get; set; } = "General";
+
     public DateTime? DueDate { get; set; }
     
     public Enums.TaskPriority Priority { get; set; }

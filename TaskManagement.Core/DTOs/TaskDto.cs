@@ -9,6 +9,7 @@ public class TaskDto
     public string Description { get; set; } = string.Empty;
     public Enums.TaskItemStatus Status { get; set; }
     public Enums.TaskPriority Priority { get; set; }
+    public string Category { get; set; } = "General";
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public DateTime? DueDate { get; set; }

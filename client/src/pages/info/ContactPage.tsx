@@ -61,7 +61,7 @@ const ContactPage: React.FC = () => {
             </div>
             <div className="info-item">
               <h4>📍 Address</h4>
-              <p>Room 66, Hostel 6, Ghulam Ishaq Khan Institute of Engineering Sciences and Technology, Topi, Swabi, KPK, PAKISTAN</p>
+              <p>Room 67, Hostel 6, Ghulam Ishaq Khan Institute of Engineering Sciences and Technology, Topi, Swabi, KPK, PAKISTAN</p>
             </div>
           </div>
 

@@ -14,6 +14,8 @@ public class CreateTaskDto
     
     public Enums.TaskPriority Priority { get; set; } = Enums.TaskPriority.Normal;
 
+    public string Category { get; set; } = "General";
+
     public int? ProjectId { get; set; }
     
     public int? AssignedToUserId { get; set; }

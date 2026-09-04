@@ -6,6 +6,7 @@ export interface TaskDto {
   description: string;
   status: number; // 0 = Pending, 1 = InProgress, 2 = Completed
   priority: number; // 0 = Low, 1 = Medium, 2 = High
+  category?: string;
   createdAt: string;
   dueDate: string | null;
   userId: number;
@@ -16,6 +17,7 @@ export interface CreateTaskDto {
   title: string;
   description: string;
   priority: number;
+  category?: string;
   dueDate: string | null;
   assignedToUserId?: number;
   projectId?: number | null;
@@ -26,6 +28,7 @@ export interface UpdateTaskDto {
   description: string;
   status: number;
   priority: number;
+  category?: string;
   dueDate: string | null;
   assignedToUserId?: number;
   projectId?: number | null;

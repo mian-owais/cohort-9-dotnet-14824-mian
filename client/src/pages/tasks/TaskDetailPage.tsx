@@ -87,6 +87,9 @@ const TaskDetailPage: React.FC = () => {
                 <span className={`status-badge status-${task.status}`}>
                   {task.status === 0 ? 'Pending' : task.status === 1 ? 'In Progress' : 'Completed'}
                 </span>
+                <span className="status-badge" style={{ marginLeft: '1rem', background: '#4A5568' }}>
+                  {task.category || 'General'}
+                </span>
                 {task.dueDate && (
                   <span className="due-date" style={{ marginLeft: '1rem' }}>
                     Due: {new Date(task.dueDate).toLocaleDateString()}

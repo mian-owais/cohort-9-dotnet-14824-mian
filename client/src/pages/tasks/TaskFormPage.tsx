@@ -14,6 +14,7 @@ const TaskFormPage: React.FC = () => {
     description: '',
     status: 0,
     priority: 0,
+    category: 'General',
     dueDate: '',
     assignedToUserId: '',
     projectId: ''
@@ -42,6 +43,7 @@ const TaskFormPage: React.FC = () => {
             description: data.description,
             status: data.status,
             priority: data.priority,
+            category: data.category || 'General',
             dueDate: data.dueDate ? new Date(data.dueDate).toISOString().split('T')[0] : '',
             assignedToUserId: data.userId ? data.userId.toString() : '',
             projectId: data.projectId ? data.projectId.toString() : ''
@@ -68,6 +70,7 @@ const TaskFormPage: React.FC = () => {
           description: formData.description,
           status: Number(formData.status),
           priority: Number(formData.priority),
+          category: formData.category,
           dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
           assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined,
           projectId: formData.projectId ? Number(formData.projectId) : null
@@ -78,6 +81,7 @@ const TaskFormPage: React.FC = () => {
           title: formData.title,
           description: formData.description,
           priority: Number(formData.priority),
+          category: formData.category,
           dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
           assignedToUserId: formData.assignedToUserId ? Number(formData.assignedToUserId) : undefined,
           projectId: formData.projectId ? Number(formData.projectId) : null
@@ -157,6 +161,17 @@ const TaskFormPage: React.FC = () => {
                 <option value={1}>Medium</option>
                 <option value={2}>High</option>
               </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="category">Category</label>
+              <input
+                id="category"
+                type="text"
+                value={formData.category}
+                onChange={e => setFormData({ ...formData, category: e.target.value })}
+                placeholder="e.g. Work, Personal"
+              />
             </div>
 
             <div className="form-group">

@@ -70,6 +70,7 @@ public class TaskService : ITaskService
             Description = t.Description,
             Status = t.Status,
             Priority = t.Priority,
+            Category = t.Category,
             CreatedAt = t.CreatedAt,
             UpdatedAt = t.UpdatedAt,
             DueDate = t.DueDate,
@@ -96,6 +97,7 @@ public class TaskService : ITaskService
             Description = task.Description,
             Status = task.Status,
             Priority = task.Priority,
+            Category = task.Category,
             CreatedAt = task.CreatedAt,
             UpdatedAt = task.UpdatedAt,
             DueDate = task.DueDate,
@@ -119,6 +121,7 @@ public class TaskService : ITaskService
             Description = dto.Description,
             Status = Core.Enums.TaskItemStatus.Pending,
             Priority = dto.Priority,
+            Category = dto.Category,
             CreatedAt = DateTime.UtcNow,
             DueDate = dto.DueDate,
             ProjectId = dto.ProjectId,
@@ -155,6 +158,7 @@ public class TaskService : ITaskService
             Description = task.Description,
             Status = task.Status,
             Priority = task.Priority,
+            Category = task.Category,
             CreatedAt = task.CreatedAt,
             UpdatedAt = task.UpdatedAt,
             DueDate = task.DueDate,
@@ -178,6 +182,7 @@ public class TaskService : ITaskService
         task.Description = dto.Description;
         task.Status = dto.Status;
         task.Priority = dto.Priority;
+        task.Category = dto.Category;
         task.DueDate = dto.DueDate;
         task.ProjectId = dto.ProjectId;
         task.UpdatedAt = DateTime.UtcNow;
@@ -222,6 +227,7 @@ public class TaskService : ITaskService
             Description = task.Description,
             Status = task.Status,
             Priority = task.Priority,
+            Category = task.Category,
             CreatedAt = task.CreatedAt,
             UpdatedAt = task.UpdatedAt,
             DueDate = task.DueDate,

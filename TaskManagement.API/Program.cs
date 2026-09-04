@@ -109,6 +109,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowReactClient");
 
+app.UseMiddleware<TaskManagement.API.Middlewares.GlobalExceptionMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
